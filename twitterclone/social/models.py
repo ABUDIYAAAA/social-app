@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from chats.models import Chats
 # Create your models here.
 
 
@@ -76,5 +77,8 @@ class Notification(models.Model):
         'Post', on_delete=models.CASCADE, related_name='+', blank=True, null=True)
     comment = models.ForeignKey(
         'Comment', on_delete=models.CASCADE, related_name='+', blank=True, null=True)
+
+    chat = models.ForeignKey(Chats, on_delete=models.CASCADE, related_name='+', blank=True, null=True)
+
     date = models.DateTimeField(default=timezone.now)
     user_has_seen = models.BooleanField(default=False)

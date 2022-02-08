@@ -1,5 +1,6 @@
 <!doctype html>
 {% load static %}
+{%load crispy_forms_tags%}
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -13,8 +14,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Russo+One&family=Supermercado+One&display=swap" rel="stylesheet">
     <style>
     .notification-badge {
       transition: 0.3s;
@@ -38,6 +38,7 @@
       box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.2)
       z-index: 1;
       font-size: 0.9rem;
+      margin-left: auto;
     }
 
     .dropdown-content a {
@@ -77,6 +78,78 @@
       border-radius: 10px;
       margin-bottom: 10px;
 
+    }
+
+    /* div styles */
+
+
+    /* form syles */
+
+    .image-upload>.image {
+      display: none;
+  }
+    /* CHAT STYLES */
+
+    .wrapper {
+      margin-left: auto; margin-right: 0;
+    }
+
+
+    @use postcss-nested;
+
+    :root {
+      --send-bg: #0B93F6;
+      --send-color: white;
+      --receive-bg: #E5E5EA;
+      --receive-text: black;
+      --page-background: white;
+    }
+
+    .messagep {
+      max-width: 255px;
+      word-wrap: break-word;
+      margin-bottom: 12px;
+      line-height: 24px;
+      position: relative;
+    	padding: 10px 20px;
+      border-radius: 25px;
+
+      &:before, &:after {
+        content: "";
+    		position: absolute;
+        bottom: 0;
+        height: 25px;
+      }
+    }
+
+    .send {
+      max-width: 255px;
+      word-wrap: break-word;
+      margin-bottom: 12px;
+      line-height: 24px;
+      position: relative;
+    	padding: 10px 20px;
+      border-radius: 25px;
+
+
+    	color: var(--send-color);
+    	background: var(--send-bg);
+    	margin-left: auto;
+      margin-right: 0;
+
+    }
+    .receive {
+      max-width: 255px;
+      word-wrap: break-word;
+      margin-bottom: 12px;
+      line-height: 24px;
+      position: relative;
+    	padding: 10px 20px;
+      border-radius: 25px;
+    	background: var(--receive-bg);
+    	color: black;
+      margin-left: auto;
+      margin-right: 0;
     }
     </style>
 

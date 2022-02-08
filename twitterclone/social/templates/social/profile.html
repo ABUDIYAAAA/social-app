@@ -31,11 +31,17 @@
     </span> </h3>
     </div>
 
-    <div class="mb-3">
-      <a href="{% url 'list_followers' profile.pk%}" style="text-decoration: none">followers: {{number_of_followers}}</a>
+  <div class="justify-content-center mt-5 btn-group" role="group">
       {% if  profile.user != request.user%}
+      <form action="{% url 'chat_create' profile.user.pk%}" method="post">
+        {% csrf_token %}
+        <button type="submit" name="button" class="btn btn-outline-success">Message</button>
+      </form>
+      {%else%}
+      <a href="{% url 'list_followers' profile.pk%}" type="a" style="text-decoration: none; margin-right:25px;width: 1000px" class="btn btn-outline-info">followers: {{number_of_followers}}</a>
       {% endif %}
-    </div>
+  </div>
+
 
   </div>
 </div>

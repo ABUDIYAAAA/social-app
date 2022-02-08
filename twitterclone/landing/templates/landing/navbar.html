@@ -30,6 +30,7 @@
         <ul class="dropdown-menu">
             <li><a href="{%url 'profile' request.user.profile.pk%}" class="dropdown-item">Profile</a></li>
             <li><a href="{%url 'account_logout'%}" class="dropdown-item">Sign Out</a></li>
+            <li><a href="{% url 'chats_list' %}" class="dropdown-item">Chats</a></li>
         </ul>
       </div>
       <div class="nav-item">

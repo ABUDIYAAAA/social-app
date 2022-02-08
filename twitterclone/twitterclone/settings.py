@@ -33,8 +33,13 @@ AUTHENTICATION_BACKENDS = [
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
 
+    "sesame.backends.ModelBackend",
+
 ]
 
+
+# seasme
+SESAME_MAX_AGE = 480
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Application definition
@@ -48,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social',
     'landing',
+    'chats',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -70,6 +76,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'twitterclone.urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -87,8 +94,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'twitterclone.wsgi.application'
-ASGI_APPLICATION = "twitterclone.asgi.application"
-
+# channels
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

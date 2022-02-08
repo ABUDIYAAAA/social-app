@@ -1,6 +1,6 @@
 <div class="dropdown">
   <span class="badge bg-primary notification-badge" style="transition: 0.3s;" onclick="showNotification()">{{notifications.count}}</span>
-  <div class="dropdown-content d-none" id='notification-container'>
+  <div class="dropdown-content d-none container" id='notification-container'>
     {% for notification in notifications %}
       {% if notification.post %}
         {% if notification.notification_type == 1 %}
@@ -19,12 +19,20 @@
       <div class=" dropdown-item-parent">
         <a href="{% url 'post_notifcation' notification.pk notification.comment.post.pk%}">@{{notification.from_user}} liked your comment</a>
         <a href="{% url 'notification_remove' notification.pk%}" onclick="removeNotification(`{% url 'notification_remove' notification.pk %}`, `{{ request.path }}`)"><span class='dropdown-item-close' onclick="">&times;</span></a>
+
       </div>
       {%endif%}
+    {%elif notification.chat%}
+      <div class="dropdown-item-parent">
+        <a href="{% url 'chat' notification.chat.pk%}">Message from @{{notification.from_user}}</a>
+        <a class="" href="{% url 'notification_remove' notification.pk%}" onclick="removeNotification(`{% url 'notification_remove' notification.pk %}`, `{{ request.path }}`)"><span class='dropdown-item-close' onclick="">&times;</span></a>
+      </div>
+
     {% else %}
     <div class=" dropdown-item-parent">
-      <a href="{% url 'follow_notification' notification.pk notification.from_user.profile.pk%}">@{{notification.from_user}} has started following yout</a>
+      <a href="{% url 'follow_notification' notification.pk notification.from_user.profile.pk%}">@{{notification.from_user}} has started following you</a>
       <a href="{% url 'notification_remove' notification.pk%}" onclick="removeNotification(`{% url 'notification_remove' notification.pk %}`, `{{ request.path }}`)"><span class='dropdown-item-close' onclick="">&times;</span></a>
+    </div>
     {%endif%}
   {% endfor %}
     </div>
