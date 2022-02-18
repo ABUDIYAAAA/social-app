@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponse
 from django.db.models import Q
+from chats.models import Chats
 
 # Create your views here.
 
@@ -142,6 +143,8 @@ class ProfileView(View):
         followers = profile.followers.all()
         number_of_followers = len(followers)
 
+        chats = Chats.objects.all()
+
         if len(followers) == 0:
             is_following = False
 
@@ -157,7 +160,8 @@ class ProfileView(View):
             'profile': profile,
             'posts': posts,
             'number_of_followers': number_of_followers,
-            'is_following': is_following
+            'is_following': is_following,
+            'chats': chats
         }
 
         return render(request, 'social/profile.html', context)

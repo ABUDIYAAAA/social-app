@@ -10,6 +10,8 @@ from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from social.models import Notification
 from django.shortcuts import redirect
 from django.db.models import Q
+from django.http import HttpResponse
+import asyncio
 # Create your views here.
 
 
@@ -18,12 +20,20 @@ def index(request):
     user = request.user
     chats = Chats.objects.filter(users=request.user)
 
-    notifcations = Notification.objects.filter(to_user=request.user)
+    notifications = Notification.objects.filter(to_user=request.user)
+
+    notis = 0
+
+
+    for noti in notifications:
+        if noti.notification_type == 4:
+            notis = notis + 1
 
 
     context = {
         'chats': chats,
-        'notifcations': notifcations
+        'notifications': notifications,
+        'notis': notis,
     }
     return render(request, 'chats/index.html', context)
 
@@ -69,7 +79,7 @@ class ChatView(View, LoginRequiredMixin, UserPassesTestMixin):
         messages = Messages.objects.filter(
             chat=chat).order_by('created_on')
 
-        user = 'hahahahahaha'
+        to_user = 'hahahahahaha'
 
 
         authorized = False
@@ -77,10 +87,10 @@ class ChatView(View, LoginRequiredMixin, UserPassesTestMixin):
         for user in chat.users.all():
             if user == request.user:
                 authorized = True
-
-        for user in chat.users.all():
-            if user != request.user:
+            else:
                 to_user = user
+
+
 
         form = MessageForm(request.POST, request.FILES)
 
@@ -91,7 +101,7 @@ class ChatView(View, LoginRequiredMixin, UserPassesTestMixin):
                 new_message.author = request.user
                 new_message.chat = chat
                 new_message.save()
-                Notification.objects.create(notification_type=4, from_user=request.user, to_user=user, chat=chat)
+                Notification.objects.create(notification_type=4, from_user=request.user, to_user=to_user, chat=chat)
 
 
             form = MessageForm()
@@ -139,34 +149,85 @@ class MessageDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class MessageCreate(View):
     def post(self, request, pk, *args, **kwargs):
-        user = User.objects.filter(pk=request.user.pk)
-        user2 = User.objects.filter(pk=pk)
-        chats = Chats.objects.all()
+        user2 = User.objects.get(pk=pk)
+
+        users = request.user.id, user2
+
+        chats = Chats.objects.filter(users=request.user)
 
         go = True
         chat = None
-
         for chat in chats:
-            if chat.users.first() == user or chat.users.first() == user2 and chat.users.last == user or chat.users.last() == user2:
-                go = False
+            for user in chat.users.all():
+                if user == user2:
+                    go = False
 
         if go:
             chat = Chats.objects.create()
-            chat.users.add(request.user.id)
+            chat.users.add(request.user)
             chat.users.add(pk)
             chat.save()
-            return redirect('chats_list')
+            return redirect('chat', pk=chat.pk)
 
         else:
-
-            messages = Messages.objects.filter(chat=chat)
-
-            form = MessageForm()
-
-            context = {
-                'messages': messages,
-                'form': form
-            }
+            return redirect('chat', pk=chat.pk)
 
 
-            return render(request, 'chats/chat.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        # user = User.objects.filter(pk=request.user.pk)
+        # user2 = User.objects.filter(pk=pk)
+        # chats = Chats.objects.filter(users=user).all()
+        #
+        # go = True
+        # chat = None
+        #
+        # for chat in chats:
+        #     if chat.users.first() == user2 or chat.users.last() == user2 and chat.users.first() == user or chat.users.last() == user:
+        #         go = False
+        #         chat = chat
+        #
+        # if go:
+        #     chat = Chats.objects.create()
+        #     chat.users.add(request.user.id)
+        #     chat.users.add(pk)
+        #     chat.save()
+        #     messages = Messages.objects.filter(chat=chat)
+        #     form = MessageForm()
+        #
+        #     context = {
+        #         'messages': messages,
+        #         'form': form
+        #         }
+        #
+        #     return render(request, 'chats/chat.html', context)
+        #
+        # else:
+        #
+        #     messages = Messages.objects.filter(chat=chat)
+        #
+        #     form = MessageForm()
+        #
+        #     context = {
+        #         'messages': messages,
+        #         'form': form
+        #     }
+        #
+        #
+        #     return render(request, 'chats/chat.html', context)

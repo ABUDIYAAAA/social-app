@@ -22,12 +22,13 @@
 
       </div>
       {%endif%}
-    {%elif notification.chat%}
+    {%elif notification.type == 4%}
+      {% if notification.to_user != request.user %}
       <div class="dropdown-item-parent">
         <a href="{% url 'chat' notification.chat.pk%}">Message from @{{notification.from_user}}</a>
         <a class="" href="{% url 'notification_remove' notification.pk%}" onclick="removeNotification(`{% url 'notification_remove' notification.pk %}`, `{{ request.path }}`)"><span class='dropdown-item-close' onclick="">&times;</span></a>
       </div>
-
+      {% endif %}
     {% else %}
     <div class=" dropdown-item-parent">
       <a href="{% url 'follow_notification' notification.pk notification.from_user.profile.pk%}">@{{notification.from_user}} has started following you</a>
